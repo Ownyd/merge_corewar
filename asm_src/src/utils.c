@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 02:25:30 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/15 16:06:02 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/15 18:21:06 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ static int		create_file(char *av)
 		i++;
 	av[i - 1] = '\0';
 	tmp = ft_strjoin(av, "cor");
-	fd = open(tmp, O_CREAT | O_RDWR, 0755);
+	if ((fd = open(tmp, O_CREAT | O_RDWR, 0755)) != -1)
+	{
+		ft_putstr("Writing output program to ");
+		ft_putendl(tmp);
+	}
 	free(tmp);
 	return (fd);
 }
