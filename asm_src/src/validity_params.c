@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 20:35:38 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/09 01:53:23 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/15 17:46:07 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int		test_dir(char *dir, int opc, int index)
 	{
 		while (ft_strchr(LABEL_CHARS, dir[i]) && dir[i] != '\0')
 			i++;
-		tmp = ft_strsub(dir, 1, i + 1);
+		tmp = ft_strsub(dir, 1, i);
 		if (store_label(tmp, 0, 2) == -1)
 		{
 			free(tmp);

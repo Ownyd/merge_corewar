@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 18:46:20 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 17:19:50 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/15 17:40:53 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_delspaces(char *str)
 		if (tmp[i] == ' ' || tmp[i] == '\t')
 		{
 			tmp = ft_strfreejoin(ft_strsub(tmp, 0, i),
-					ft_strfreesub(tmp, i + 1, len), 3);
+					ft_strfreesub(tmp, i + 1, ft_strlen(tmp + i + 1)), 3);
 		}
 		else
 			i++;

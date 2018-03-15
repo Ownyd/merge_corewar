@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlux <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: lowczarc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/16 22:05:15 by tlux              #+#    #+#             */
-/*   Updated: 2017/11/16 22:09:20 by tlux             ###   ########.fr       */
+/*   Created: 2017/11/10 10:58:56 by lowczarc          #+#    #+#             */
+/*   Updated: 2018/03/15 17:41:12 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 static int	strlen_space(const char *s)
 {
