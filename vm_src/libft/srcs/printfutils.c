@@ -6,14 +6,13 @@
 /*   By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/01 16:21:42 by lowczarc          #+#    #+#             */
-/*   Updated: 2018/01/10 12:31:45 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/15 17:33:52 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
-int		ft_readformat(char **str, t_formaitem format, va_list ap)
+int		ft_readformat(int fd, char **str, t_formaitem format, va_list ap)
 {
 	char	*(*f)(va_list, t_formaitem*, int*);
 	char	*ret;
@@ -37,7 +36,7 @@ int		ft_readformat(char **str, t_formaitem format, va_list ap)
 			ret = ft_strnjoin(tmp, ret, ft_strlen(tmp), size);
 		size = format.min_size;
 	}
-	write(1, ret, size);
+	write(fd, ret, size);
 	free(ret);
 	return (size);
 }
@@ -76,7 +75,7 @@ void	precisionwildcard(t_formaitem *format, int ret)
 	format->precision = ret;
 }
 
-int		ft_readflags(char **str, va_list ap)
+int		ft_readflags(int fd, char **str, va_list ap)
 {
 	t_formaitem	format;
 	int			tmp;
@@ -97,30 +96,27 @@ int		ft_readflags(char **str, va_list ap)
 			(*str)++;
 	}
 	format.flags = format.flags | ft_modifier(str);
-	return (ft_readformat(str, format, ap));
+	return (ft_readformat(fd, str, format, ap));
 }
 
-int		ft_printf(char *format, ...)
+int		ft_vdprintf(int fd, char *format, va_list ap)
 {
-	va_list ap;
 	int		size;
 	int		tmp;
 
 	size = 0;
-	va_start(ap, format);
 	while (*format && !(*format == '%' && format[1] == 0))
 	{
 		if (*format != '%')
-			size += ft_putstrfinalc(&format, '%');
+			size += ft_putstrfinalc(fd, &format, '%');
 		else
 		{
 			format++;
-			tmp = ft_readflags(&format, ap);
+			tmp = ft_readflags(fd, &format, ap);
 			if (tmp == -1)
 				return (-1);
 			size += tmp;
 		}
 	}
-	va_end(ap);
 	return (size);
 }
