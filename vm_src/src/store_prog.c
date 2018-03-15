@@ -6,7 +6,7 @@
 /*   By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 12:56:44 by lowczarc          #+#    #+#             */
-/*   Updated: 2018/03/08 19:35:36 by emarin           ###   ########.fr       */
+/*   Updated: 2018/03/15 17:37:41 by emarin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ int	store_prog(int fd, char *name, t_player *player)
 			|| read(fd, &(player->prog_size), 4) != 4
 			|| read(fd, player->comment, COMMENT_LENGTH) != COMMENT_LENGTH)
 	{
-		ft_printf("%s is not a corewar executable\n", name);
+		ft_dprintf(2, "%s is not a corewar executable\n", name);
 		return (0);
 	}
 	if ((player->prog_size = rev_int(player->prog_size)) > CHAMP_MAX_SIZE)
-		ft_printf("%s is too large (%d bytes > %d bytes)\n", name,
+		ft_dprintf(2, "%s is too large (%d bytes > %d bytes)\n", name,
 				player->prog_size, CHAMP_MAX_SIZE);
 	if (player->prog_size > CHAMP_MAX_SIZE)
 		return (0);
@@ -65,7 +65,7 @@ int	store_prog(int fd, char *name, t_player *player)
 	if (read(fd, &unused, 4) != 4 || read(fd, player->prog, player->prog_size)
 	!= player->prog_size || read(fd, &unused, 4) != 0)
 	{
-		ft_printf("%s is not a corewar executable\n", name);
+		ft_dprintf(2, "%s is not a corewar executable\n", name);
 		return (0);
 	}
 	return (1);

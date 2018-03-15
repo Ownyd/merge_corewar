@@ -6,7 +6,7 @@
 /*   By: emarin <emarin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 10:57:05 by emarin            #+#    #+#             */
-/*   Updated: 2018/03/09 00:16:08 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/15 17:37:19 by emarin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void			set_player_nb_par(t_vm *vm, long long new_player_nb, int play_i
 	if (new_player_nb < 1LL << (8 * REG_SIZE))
 	{
 		if (player_nb_exist(vm, player_nb, new_player_nb))
-			ft_printf("Warning:\n\t\"-n %lld"
+			ft_dprintf(2, "Warning:\n\t\"-n %lld"
 			"\" ignored, because the number is already set\n", new_player_nb);
 		else
 		{
@@ -54,7 +54,7 @@ void			set_player_nb_par(t_vm *vm, long long new_player_nb, int play_i
 		}
 	}
 	else
-		ft_printf("Warning:\n\t\"-n %lld"
+		ft_dprintf(2, "Warning:\n\t\"-n %lld"
 		"\" ignored, because it's bigger than registery\n", new_player_nb);
 }
 
