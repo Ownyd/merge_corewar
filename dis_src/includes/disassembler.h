@@ -6,7 +6,7 @@
 /*   By: emarin <emarin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 18:36:04 by emarin            #+#    #+#             */
-/*   Updated: 2018/03/15 16:22:18 by emarin           ###   ########.fr       */
+/*   Updated: 2018/03/15 17:51:52 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ typedef struct		s_op
 	int		dir_size;
 }					t_op;
 
-int			usage_disassembler();
-t_op		*get_op_by_id(unsigned char index);
-long long	par_to_ll(char *param, int par_size);
-int			store_prog(int fd, char *name, t_player *player);
-int			ft_er(char *message);
+int					usage_disassembler();
+t_op				*get_op_by_id(unsigned char index);
+long long			par_to_ll(char *param, int par_size);
+int					store_prog(int fd, char *name, t_player *player);
+int					ft_er(char *message);
 
 static const t_op g_op[] =
 {

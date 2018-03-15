@@ -6,7 +6,7 @@
 /*   By: emarin <emarin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 10:57:05 by emarin            #+#    #+#             */
-/*   Updated: 2018/03/15 16:28:28 by emarin           ###   ########.fr       */
+/*   Updated: 2018/03/15 17:54:02 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@ void	print_arg(t_player *player, int *i, t_op *operateur)
 
 void	print_arg_no_ocp(t_player *player, int *i, t_op *operateur)
 {
-	ft_printf("%%%lld", par_to_ll(&(player->prog[*i])
-	, 4 - (2 * operateur->dir_size)));
+	ft_printf("%%%lld", par_to_ll(&(player->prog[*i]),
+			4 - (2 * operateur->dir_size)));
 	*i += 4 - (2 * operateur->dir_size);
 }
-
 
 void	disassembler(t_player *player)
 {
