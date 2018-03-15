@@ -6,7 +6,7 @@
 /*   By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/04 16:47:08 by lowczarc          #+#    #+#             */
-/*   Updated: 2018/01/10 12:27:56 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/15 17:27:20 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ char				*float_format(va_list ap, t_formaitem *format, int *size);
 char				*pourcent_format(va_list ap, t_formaitem *format,
 		int *size);
 int					ft_printf(char *format, ...);
+int					ft_vdprintf(int fd, char *format, va_list ap);
+int					ft_dprintf(int fd, char *format, ...);
 void				ft_putnstr(char *str, int size);
 char				*ft_strnjoin(char *s1, char *s2, int n1, int n2);
 char				*ft_strfreejoin(char *s1, char *s2);
@@ -59,7 +61,7 @@ char				*ft_llitoa(long long int n, t_formaitem *format);
 char				*ft_llutoa(unsigned long long int n, int size);
 char				*ft_llxtoa(unsigned long long int n, t_formaitem *format,
 		char *base, char *spe);
-size_t				ft_putstrfinalc(char **str, char c);
+size_t				ft_putstrfinalc(int fd, char **str, char c);
 size_t				ft_strlenc(const char *s, char c);
 
 #endif

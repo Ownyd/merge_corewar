@@ -6,7 +6,7 @@
 /*   By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 13:21:20 by lowczarc          #+#    #+#             */
-/*   Updated: 2018/01/10 13:11:40 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/15 17:25:59 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_putstrcolor(char **str)
 	return (NULL);
 }
 
-size_t	ft_putstrfinalc(char **str, char c)
+size_t	ft_putstrfinalc(int fd, char **str, char c)
 {
 	size_t		len;
 
@@ -46,13 +46,13 @@ size_t	ft_putstrfinalc(char **str, char c)
 	{
 		if (ft_putstrcolor(str))
 		{
-			write(1, ft_putstrcolor(str), ft_strlen(ft_putstrcolor(str)));
+			write(fd, ft_putstrcolor(str), ft_strlen(ft_putstrcolor(str)));
 			len += ft_strlen(ft_putstrcolor(str));
 			*str += ft_strlenc(*str, '}') + 1;
 		}
 		else
 		{
-			write(1, (*str)++, 1);
+			write(fd, (*str)++, 1);
 			len++;
 		}
 	}

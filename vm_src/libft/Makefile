@@ -6,7 +6,7 @@
 #    By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/04 21:27:41 by lowczarc          #+#    #+#              #
-#    Updated: 2018/03/15 15:59:33 by tlux             ###   ########.fr        #
+#    Updated: 2018/03/15 17:31:48 by lowczarc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ OBJ=ft_memset.o ft_bzero.o ft_memcpy.o ft_memmove.o ft_memchr.o ft_memcmp.o \
 	ft_atoi_l.o ft_strlen_unicode.o \
 	printfutils.o flags_detect.o printf_char.o printf_int.o printf_pourcent.o \
 	printf_string.o ft_wstr.o ft_lltoa.o ft_llxtoa.o ft_strfreejoin.o \
-	ft_strlenc.o ft_putstrfinalc.o printf_float.o \
+	ft_strlenc.o ft_putstrfinalc.o printf_float.o ft_printf.o \
 	get_next_line.o
 
 HEADERS=$(INCLUDEPATH)/libft.h $(INCLUDEPATH)/ft_printf.h \
