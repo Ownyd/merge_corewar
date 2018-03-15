@@ -6,12 +6,12 @@
 #    By: emarin <emarin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 11:20:07 by emarin            #+#    #+#              #
-#    Updated: 2018/03/15 16:44:01 by emarin           ###   ########.fr        #
+#    Updated: 2018/03/15 16:40:42 by emarin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL:=/bin/zsh
-NAME=corewar
+NAME=disassembler
 SRCS_PATH=src
 OBJ_PATH=obj
 INCLUDE_PATH=includes
@@ -19,31 +19,14 @@ LIB=libft.a
 LIB_PATH=libft
 LIB_INCLUDE_PATH=libft/includes
 
-OBJ_NAME=	corewar.o \
-			vm_util.o \
-			util.o \
-			store_prog.o \
-			charge_in_memory.o \
-			process.o \
-			reg_utils.o \
-			game.o \
-			process_execution.o \
-			op_fonct1.o \
-			op_fonct2.o \
-			op_fonct3.o \
-			op_fonct4.o \
+OBJ_NAME= disassembler.o \
+			disassembler_util.o \
 			op_utils.o \
-			reg_operands.o \
-			arena_utils.o \
-			print_winner.o \
-			visu_ncurses.o \
-			visu_ncurses_print.o \
-			visu_ncurses_util.o
+			store_prog.o
 
 OBJ=$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
-HEADERS=$(INCLUDE_PATH)/corewar.h $(INCLUDE_PATH)/op.h \
-		$(INCLUDE_PATH)/visu_ncurses.h
+HEADERS=$(INCLUDE_PATH)/disassembler.h $(INCLUDE_PATH)/op.h \
 
 FLAGS= -Wall -Wextra -Werror -I $(LIB_INCLUDE_PATH) -I $(INCLUDE_PATH) -g
 LINK_FLAGS= -L $(LIB_PATH) -lft -lncurses -g
