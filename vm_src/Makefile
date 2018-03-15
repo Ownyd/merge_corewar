@@ -6,12 +6,12 @@
 #    By: emarin <emarin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 11:20:07 by emarin            #+#    #+#              #
-#    Updated: 2018/03/15 16:44:01 by emarin           ###   ########.fr        #
+#    Updated: 2018/03/15 18:32:56 by lowczarc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL:=/bin/zsh
-NAME=corewar
+NAME=../corewar
 SRCS_PATH=src
 OBJ_PATH=obj
 INCLUDE_PATH=includes
@@ -45,8 +45,8 @@ OBJ=$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 HEADERS=$(INCLUDE_PATH)/corewar.h $(INCLUDE_PATH)/op.h \
 		$(INCLUDE_PATH)/visu_ncurses.h
 
-FLAGS= -Wall -Wextra -Werror -I $(LIB_INCLUDE_PATH) -I $(INCLUDE_PATH) -g
-LINK_FLAGS= -L $(LIB_PATH) -lft -lncurses -g
+FLAGS= -Wall -Wextra -Werror -I $(LIB_INCLUDE_PATH) -I $(INCLUDE_PATH)
+LINK_FLAGS= -L $(LIB_PATH) -lft -lncurses
 
 
 RED=\033[31m
@@ -56,7 +56,11 @@ EOC=\033[0m
 
 all: $(LIB) $(NAME)
 
-$(NAME): $(LIB_PATH)/$(LIB) $(OBJ)
+.display:
+	@echo "--> make $(ORANGE)$(NAME)$(EOC)"
+	@touch .display
+
+$(NAME): $(LIB_PATH)/$(LIB) .display $(OBJ)
 	@gcc -o $(NAME) $(OBJ) $(LINK_FLAGS)
 	@echo "\n\t                  $(GREEN)[SUCCESS]$(EOC)\c"
 	@echo "\r$(NAME)"
@@ -75,7 +79,8 @@ $(LIB):
 clean:
 	@echo "--> fclean $(ORANGE)$(LIB_PATH)/$(EOC)"
 	@$(MAKE) -C $(LIB_PATH) fclean
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_PATH)
+	@rm -f .display
 	@echo "\t                  $(RED)[DELETED]$(EOC)\c"
 	@echo "\r*.o"
 
