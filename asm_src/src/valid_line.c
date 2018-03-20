@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/25 21:20:52 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/18 19:18:30 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/20 11:56:19 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static int		validity_name(char *line, t_utils *utils)
 		return (name_error(1, tmp));
 	if (tmp[i] == '\0')
 		i = read_in_field(i, 129, utils->fd);
+	else if (!ft_isstrblank(tmp + i + 1))
+		return (name_error(1, tmp));
 	if (i > 129)
 		return (name_error(1, tmp));
 	if (utils->name == 1)
@@ -47,8 +49,7 @@ static int		validity_com(char *line, t_utils *utils)
 
 	seek = lseek(utils->fd, 0, SEEK_CUR);
 	i = 1;
-	if (!(tmp = ft_strtrim(line)))
-		malloc_error();
+	tmp = ft_strtrim(line);
 	if (tmp[0] != '"' || ft_strocur(tmp, '"') > 2)
 		return (comment_error(1, tmp));
 	while (tmp[i] != '\0' && tmp[i] != '"')
@@ -57,6 +58,8 @@ static int		validity_com(char *line, t_utils *utils)
 		return (comment_error(1, tmp));
 	if (tmp[i] == '\0')
 		i = read_in_field(i, 2049, utils->fd);
+	else if (!ft_isstrblank(tmp + i + 1))
+		return (comment_error(1, tmp));
 	if (i > 2049)
 		return (comment_error(1, tmp));
 	if (utils->com == 1)

@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/22 23:53:08 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/20 01:25:30 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/20 09:11:11 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int			main(int ac, char **av)
 	i = 1;
 	if (ac == 1)
 	{
-		ft_putendl("usage : ./asm [files.cor]");
+		ft_putendl("usage : ./asm [files.cor] ...");
 	}
 	
 	while (i < ac)
