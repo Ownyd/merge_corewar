@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 01:52:26 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 17:29:20 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/20 12:05:24 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	delspaces_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		tmp = ft_delspaces(tab[i]);
+		tmp = ft_strtrim(tab[i]);
 		free(tab[i]);
 		tab[i] = tmp;
 		i++;
