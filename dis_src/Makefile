@@ -6,7 +6,7 @@
 #    By: emarin <emarin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 11:20:07 by emarin            #+#    #+#              #
-#    Updated: 2018/03/15 18:33:30 by lowczarc         ###   ########.fr        #
+#    Updated: 2018/03/20 11:58:55 by lowczarc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJ_NAME= disassembler.o \
 
 OBJ=$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
-HEADERS=$(INCLUDE_PATH)/disassembler.h $(INCLUDE_PATH)/op.h \
+HEADERS=$(INCLUDE_PATH)/disassembler.h $(INCLUDE_PATH)/op.h
 
 FLAGS= -Wall -Wextra -Werror -I $(LIB_INCLUDE_PATH) -I $(INCLUDE_PATH)
 LINK_FLAGS= -L $(LIB_PATH) -lft
