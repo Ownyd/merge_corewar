@@ -6,13 +6,13 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 16:06:27 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 17:29:14 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 19:19:17 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/asm.h"
 
-static int	identify_cmd(char *cmd, t_cmds *lst)
+int				identify_cmd(char *cmd, t_cmds *lst)
 {
 	t_cmds *tmp;
 
@@ -26,16 +26,11 @@ static int	identify_cmd(char *cmd, t_cmds *lst)
 	return (-1);
 }
 
-int			commandlist(char *cmd, int todo)
+t_cmds			*init_commands(void)
 {
-	static t_cmds *lst = NULL;
+	t_cmds *lst;
 
-	if (todo == 1)
-		return (identify_cmd(cmd, lst));
-	if (todo == 2)
-		ft_cmddel(&lst);
-	if (todo == 2)
-		return (0);
+	lst = NULL;
 	ft_cmdadd(&lst, ft_cmdnew("live", 1));
 	ft_cmdadd(&lst, ft_cmdnew("ld", 2));
 	ft_cmdadd(&lst, ft_cmdnew("st", 3));
@@ -52,5 +47,5 @@ int			commandlist(char *cmd, int todo)
 	ft_cmdadd(&lst, ft_cmdnew("lldi", 14));
 	ft_cmdadd(&lst, ft_cmdnew("lfork", 15));
 	ft_cmdadd(&lst, ft_cmdnew("aff", 16));
-	return (0);
+	return (lst);
 }

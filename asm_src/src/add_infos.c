@@ -6,121 +6,107 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/25 00:46:54 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/15 15:52:09 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 19:35:25 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/asm.h"
 
-void	put_header(t_header header)
+static void	put_header(t_utils *utils)
 {
 	int i;
 
 	i = -1;
-	print_bits(header.magic, 4);
+	print_bits(utils, utils->header.magic, 4);
 	while (++i < PROG_NAME_LENGTH)
-		store_output((header.prog_name)[i], 1, 0);
+		ft_outputadd(&(utils->output),
+				ft_outputnew((utils->header.prog_name)[i]));
 	i = -1;
-	print_bits(0, 4);
-	print_bits(header.prog_size, 4);
+	print_bits(utils, 0, 4);
+	print_bits(utils, utils->header.prog_size, 4);
 	while (++i < COMMENT_LENGTH)
-		store_output((header.comment)[i], 1, 0);
-	print_bits(0, 4);
+		ft_outputadd(&(utils->output),
+				ft_outputnew((utils->header.comment)[i]));
+	print_bits(utils, 0, 4);
 }
 
-int		get_fd(int cmd, int fd)
-{
-	static int fdstore;
-
-	if (cmd == 1)
-		fdstore = fd;
-	else if (cmd == 2)
-		return (fdstore);
-	return (fdstore);
-}
-
-void	get_name(t_header *header, char *line)
+static char	*read_buf(char *buf, t_utils *utils)
 {
 	int		i;
-	char	*buf;
 	char	*read;
 
-	buf = line[1] ? ft_strsub(line, 1, ft_strlen(line) - 1) : ft_strdup("\0");
-	if (!(line[0] == '"' &&
-				line[ft_strlen(line) - 1] == '"' && ft_strlen(line) != 1))
+	if (!(buf = ft_strfreejoin(buf, "\n", 1)))
+		malloc_error();
+	while ((i = 0) == 0 && get_next_line(utils->fd, &read) == 1)
 	{
-		buf = ft_strfreejoin(buf, "\n", 1);
-		while ((i = 0) == 0 && get_next_line(get_fd(2, 0), &read) == 1)
-		{
-			while (read[i] != '\0' && read[i] != '"')
-				i++;
-			buf = ft_strfreejoin(buf, ft_strsub(read, 0, i), 3);
-			if (read[i] == '"')
-				break ;
-			buf = ft_strfreejoin(buf, "\n", 1);
-			free(read);
-		}
+		while (read[i] != '\0' && read[i] != '"')
+			i++;
+		if (!(buf = ft_strfreejoin(buf, ft_strsub(read, 0, i), 3)))
+			malloc_error();
+		if (read[i] == '"')
+			break ;
+		if (!(buf = ft_strfreejoin(buf, "\n", 1)))
+			malloc_error();
 		free(read);
 	}
+	free(read);
+	return (buf);
+}
+
+static void	get_name(t_utils *utils, char *line)
+{
+	char	*buf;
+
+	buf = line[1] ? ft_strsub(line, 1, ft_strlen(line) - 1) : ft_strdup("\0");
+	if (buf == NULL)
+		malloc_error();
+	if (!(line[0] == '"' &&
+				line[ft_strlen(line) - 1] == '"' && ft_strlen(line) != 1))
+		buf = read_buf(buf, utils);
 	else
 		buf[ft_strlen(buf) - 1] = '\0';
-	ft_strcpy(header->prog_name, buf);
+	ft_strcpy((&(utils->header))->prog_name, buf);
 	free(buf);
 }
 
-void	get_comment(t_header *header, char *line)
+static void	get_comment(t_utils *utils, char *line)
 {
-	int		i;
 	char	*buf;
-	char	*read;
 
 	buf = line[1] ? ft_strsub(line, 1, ft_strlen(line) - 1) : ft_strdup("\0");
+	if (buf == NULL)
+		malloc_error();
 	if (!(line[0] == '"' &&
 				line[ft_strlen(line) - 1] == '"' && ft_strlen(line) != 1))
-	{
-		buf = ft_strfreejoin(buf, "\n", 1);
-		while ((i = 0) == 0 && get_next_line(get_fd(2, 0), &read) == 1)
-		{
-			while (read[i] != '\0' && read[i] != '"')
-				i++;
-			buf = ft_strfreejoin(buf, ft_strsub(read, 0, i), 3);
-			if (read[i] == '"')
-				break ;
-			buf = ft_strfreejoin(buf, "\n", 1);
-			free(read);
-		}
-		free(read);
-	}
+		buf = read_buf(buf, utils);
 	else
 		buf[ft_strlen(buf) - 1] = '\0';
-	ft_strcpy(header->comment, buf);
+	ft_strcpy((&(utils->header))->comment, buf);
 	free(buf);
 }
 
-int		add_infos(char *info, char *line, int size, int cmd)
+int			add_infos(char *line, int size, int cmd, t_utils *utils)
 {
-	static t_header header;
-	int				i;
-	static int		state = 0;
 	char			*tmp;
-	int				tmpi;
+	int				tmpseek;
 
-	if (cmd == 1 && (i = 0) == 0)
-		tmp = ft_strtrim(line);
-	if (cmd == 0 && (header.prog_size = size) == (unsigned int)size)
-		header.magic = COREWAR_EXEC_MAGIC;
-	else if (cmd == 1 && ft_strcmp(info, "name") == 0 && (++state))
-		get_name(&header, tmp);
-	else if (cmd == 1 && ft_strcmp(info, "comment") == 0 && (++state))
-		get_comment(&header, tmp);
-	else if (cmd == 2 && state == 2 && (state = 3) == 3)
+	if (cmd == 11 || cmd == 12)
+		if (!(tmp = ft_strtrim(line)))
+			malloc_error();
+	if (cmd == 0 && (utils->header.prog_size = size) == (unsigned int)size)
+		utils->header.magic = COREWAR_EXEC_MAGIC;
+	else if (cmd == 11 && (++(utils->state)))
+		get_name(utils, tmp);
+	else if (cmd == 12 && (++(utils->state)))
+		get_comment(utils, tmp);
+	else if (cmd == 2 && utils->state == 2 && (utils->state = 3) == 3)
 	{
-		tmpi = (int)lseek(get_fd(2, 0), 0, SEEK_CUR);
-		first_parse(get_fd(2, 0));
-		lseek(get_fd(2, 0), tmpi, SEEK_SET);
-		put_header(header);
+		tmpseek = (int)lseek(utils->fd, 0, SEEK_CUR);
+		first_parse(utils);
+		lseek(utils->fd, tmpseek, SEEK_SET);
+		put_header(utils);
 	}
-	if (cmd == 1)
+	if (cmd == 11 || cmd == 12)
 		free(tmp);
 	return (0);
 }

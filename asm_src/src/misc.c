@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:29:49 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/09 03:06:05 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/19 22:12:43 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	hexa_form(char *str)
 	return (1);
 }
 
-int	validity_command_line(char *line)
+int	validity_command_line(char *line, t_utils utils)
 {
 	int i;
 	int j;
@@ -62,40 +62,34 @@ int	validity_command_line(char *line)
 		j++;
 	while (ft_strchr(LABEL_CHARS, line[i + j]))
 		i++;
-	if (line[i + j] == LABEL_CHAR && !validity_label(line + j))
+	if (line[i + j] == LABEL_CHAR && !validity_label(line + j, utils))
 		return (0);
-	else if (line[i + j] != LABEL_CHAR && !validity_opc(line))
-		return (0);
-	while (ft_strchr(LABEL_CHARS, line[i]))
-		i++;
-	if (line[i] == LABEL_CHAR && !validity_label(line))
-		return (0);
-	else if (line[i] != LABEL_CHAR && !validity_opc(line))
+	else if (line[i + j] != LABEL_CHAR && !validity_opc(line, utils))
 		return (0);
 	return (1);
 }
 
-int	read_in_field(int i, int size)
+int	read_in_field(int i, int size, int fd)
 {
 	char	*buf;
 	int		j;
 	int		ret;
 
 	i++;
-	while ((ret = get_next_line(get_fd(2, 0), &buf)) == 1)
+	while ((ret = get_next_line(fd, &buf)) == 1)
 	{
 		j = 0;
 		while (buf[j] != '\0' && buf[j] != '"' && (++i))
 			j++;
+		if (ft_strocur(buf, '"') > 1)
+			i = size;
 		if (++i > size)
 			break ;
 		if (buf[j] == '"')
 		{
-			while (buf[j + 1] != '\0' && ft_strchr("\t ", buf[j + 1]))
-				j++;
 			if (buf[j + 1] != '\0' && buf[j + 1] != '#')
 				ret = 0;
-			break ;
+			break;
 		}
 		free(buf);
 	}

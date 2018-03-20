@@ -6,12 +6,12 @@
 #    By: emarin <emarin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 11:20:07 by emarin            #+#    #+#              #
-#    Updated: 2018/03/15 18:30:32 by lowczarc         ###   ########.fr        #
+#    Updated: 2018/03/18 17:09:04 by tlux             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL:=/bin/zsh
-NAME=../asm
+NAME=my_asm
 SRCS_PATH=src
 OBJ_PATH=obj
 INCLUDE_PATH=inc
@@ -36,8 +36,8 @@ OBJ_NAME=	add_infos.o \
 			misc.o \
 			opc.o \
 			param_errors.o \
-			store_label.o \
-			store_output.o \
+			label_check.o \
+			print_output.o \
 			utils.o \
 			valid_line.o \
 			validity_params.o 

@@ -6,7 +6,7 @@
 /*   By: tlux <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/13 00:12:12 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 19:14:28 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 17:22:05 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
+int					ft_strocur(char *str, char c);
 int					ft_pow(int nb, int power);
 void				ft_tabfree(char **tab);
 long long			ft_atoll(const char *str);

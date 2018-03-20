@@ -6,13 +6,13 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 17:32:00 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 19:22:21 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 19:24:03 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/asm.h"
 
-long long	convert_neg(int toconv, int size)
+static long long	convert_neg(int toconv, int size)
 {
 	long long ret;
 
@@ -25,7 +25,7 @@ long long	convert_neg(int toconv, int size)
 	return (ret);
 }
 
-void		print_bits(int toprint, int size)
+void				print_bits(t_utils *utils, int toprint, int size)
 {
 	long long ret;
 
@@ -34,14 +34,18 @@ void		print_bits(int toprint, int size)
 		ret = convert_neg(toprint, size);
 	if (size == 4)
 	{
-		store_output((int)((ret & 0xFF000000) >> 24), 1, 0);
-		store_output((int)((ret & 0x00FF0000) >> 16), 1, 0);
+		ft_outputadd(&(utils->output),
+				ft_outputnew((int)((ret & 0xFF000000) >> 24)));
+		ft_outputadd(&(utils->output),
+				ft_outputnew((int)((ret & 0x00FF0000) >> 16)));
 	}
-	store_output((int)((ret & 0x0000FF00) >> 8), 1, 0);
-	store_output((int)((ret & 0x000000FF)), 1, 0);
+	ft_outputadd(&(utils->output),
+			ft_outputnew((int)((ret & 0x0000FF00) >> 8)));
+	ft_outputadd(&(utils->output),
+			ft_outputnew((int)((ret & 0x000000FF))));
 }
 
-void		print_dir(char *dir, int opc, int octet)
+static void			print_dir(char *dir, int opc, int octet, t_utils *utils)
 {
 	int encode;
 	int lbindex;
@@ -50,16 +54,16 @@ void		print_dir(char *dir, int opc, int octet)
 			|| opc == 13) ? 4 : 2;
 	if (dir[0] == ':')
 	{
-		lbindex = store_label(dir + 1, 0, 2);
-		print_bits(lbindex - octet, encode);
+		lbindex = return_label_pc(utils->label, dir + 1);
+		print_bits(utils, lbindex - octet, encode);
 	}
 	else if (!hexa_form(dir))
-		print_bits(ft_atoi(dir), encode);
+		print_bits(utils, ft_atoi(dir), encode);
 	else
-		print_bits(conv_hexa(dir + 2), encode);
+		print_bits(utils, conv_hexa(dir + 2), encode);
 }
 
-void		print_indir(char *indir, int octet)
+static void			print_indir(char *indir, int octet, t_utils *utils)
 {
 	int		i;
 	char	*tmp;
@@ -70,32 +74,34 @@ void		print_indir(char *indir, int octet)
 	{
 		while (ft_strchr(LABEL_CHARS, indir[i]) && indir[i] != '\0')
 			i++;
-		tmp = ft_strsub(indir, 1, i + 1);
-		labcode = store_label(tmp, 0, 2);
-		print_bits(labcode - octet, 2);
+		if (!(tmp = ft_strsub(indir, 1, i)))
+			malloc_error();
+		labcode = return_label_pc(utils->label, tmp);
+		print_bits(utils, labcode - octet, 2);
 		free(tmp);
 	}
 	else if (!hexa_form(indir))
-		print_bits(ft_atoi(indir), 2);
+		print_bits(utils, ft_atoi(indir), 2);
 	else
-		print_bits(conv_hexa(indir + 2), 2);
+		print_bits(utils, conv_hexa(indir + 2), 2);
 }
 
-void		opc_params(char *params, int octet, int opc)
+void				opc_params(char *params, int octet, int opc, t_utils *utils)
 {
 	char	**tmp;
 	int		i;
 
 	i = -1;
-	tmp = ft_strsplit(params, ",");
+	if (!(tmp = ft_strsplit(params, ",")))
+		malloc_error();
 	while (++i < 3 && tmp[i])
 	{
 		if (tmp[i][0] == 'r')
-			store_output(ft_atoi(tmp[i] + 1), 1, 0);
+			ft_outputadd(&(utils->output), ft_outputnew(ft_atoi(tmp[i] + 1)));
 		else if (tmp[i][0] == '%')
-			print_dir(tmp[i] + 1, opc, octet);
+			print_dir(tmp[i] + 1, opc, octet, utils);
 		else
-			print_indir(tmp[i], octet);
+			print_indir(tmp[i], octet, utils);
 	}
 	ft_tabfree(tmp);
 }

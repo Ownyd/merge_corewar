@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 17:36:57 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/09 02:30:35 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 19:18:56 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void	opc_nbr(char *params, int opc, int *octet)
 	char	**tmpt;
 
 	i = -1;
-	tmpt = ft_strsplit(params, ",");
+	if (!(tmpt = ft_strsplit(params, ",")))
+		malloc_error();
 	while (++i < 3 && tmpt[i])
 		if (tmpt[i][0] == 'r')
 			(*octet)++;
@@ -32,25 +33,25 @@ static void	opc_nbr(char *params, int opc, int *octet)
 	ft_tabfree(tmpt);
 }
 
-static void	first_handle_commands(char *line, int *octet)
+static void	first_handle_commands(char *line, int *octet, t_utils utils)
 {
 	char	**tmp;
 	int		opc;
 	char	*tmps;
 
-	tmp = ft_strsplit(line, "\t ");
+	if (!(tmp = ft_strsplit(line, "\t ")))
+		malloc_error();
 	if (tmp == NULL)
 		return ;
-	opc = commandlist(tmp[0], 1);
+	opc = identify_cmd(tmp[0], utils.cmds);
 	tmps = ft_delspaces(line);
 	opc_nbr(tmps + ft_strlen(tmp[0]), opc, octet);
 	ft_tabfree(tmp);
 	free(tmps);
 }
 
-static int	first_parse_line(char *line)
+static int	first_parse_line(char *line, int *octet, t_utils *utils)
 {
-	static int	octet = 0;
 	int			i;
 	char		*tmp;
 
@@ -59,21 +60,22 @@ static int	first_parse_line(char *line)
 		i++;
 	if (line[i] == LABEL_CHAR)
 	{
-		tmp = ft_strsub(line, 0, i);
-		store_label(tmp, octet, 1);
+		if (!(tmp = ft_strsub(line, 0, i)))
+			malloc_error();
+		ft_labeladd(&(utils->label), ft_labelnew(tmp, *octet));
 		free(tmp);
 		if (ft_isstrblank(line + i + 1) == 0)
 		{
-			first_handle_commands(line + i + 1, &octet);
-			octet++;
+			first_handle_commands(line + i + 1, octet, *utils);
+			(*octet)++;
 		}
 	}
 	else
 	{
-		first_handle_commands(line, &octet);
-		octet++;
+		first_handle_commands(line, octet, *utils);
+		(*octet)++;
 	}
-	return (octet);
+	return (*octet);
 }
 
 void		delete_comments(char **line)
@@ -86,29 +88,33 @@ void		delete_comments(char **line)
 		i++;
 	if ((*line)[i] == '#')
 	{
-		ret = ft_strsub(*line, 0, i);
+		if (!(ret = ft_strsub(*line, 0, i)))
+			malloc_error();
 		free(*line);
 		*line = ret;
 	}
 }
 
-void		first_parse(int fd)
+void		first_parse(t_utils *utils)
 {
 	int		prog_size;
 	char	*line;
 	char	*tmp;
+	int		octet;
 
-	while (get_next_line(fd, &line) == 1)
+	octet = 0;
+	while (get_next_line(utils->fd, &line) == 1)
 	{
-		tmp = ft_strtrim(line);
+		if (!(tmp = ft_strtrim(line)))
+			malloc_error();
 		free(line);
 		delete_comments(&tmp);
 		line = tmp;
 		if (ft_isstrblank(line) == 0 && !ft_strnstr(line, ".name", 5)
 				&& !ft_strnstr(line, ".comment", 8))
-			prog_size = first_parse_line(line);
+			prog_size = first_parse_line(line, &octet, utils);
 		free(line);
 	}
 	free(line);
-	add_infos("size", NULL, prog_size, 0);
+	add_infos(NULL, prog_size, 0, utils);
 }

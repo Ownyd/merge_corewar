@@ -6,13 +6,13 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/22 23:53:08 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/09 03:13:03 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/20 01:25:30 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/asm.h"
 
-static void	handle_params(char *line, int *octet, int opc)
+static void	handle_params(char *line, t_utils *utils, int opc)
 {
 	int		i;
 	char	**tmp;
@@ -20,46 +20,47 @@ static void	handle_params(char *line, int *octet, int opc)
 	int		shift;
 	int		ocs;
 
-	ocs = *octet;
+	ocs = utils->octet;
 	ft_init_var(&print, &shift, &i);
-	tmp = ft_strsplit(line, ",");
+	if (!(tmp = ft_strsplit(line, ",")))
+		malloc_error();
 	while (++i < 3 && tmp[i] != NULL)
 	{
-		if (tmp[i][0] == 'r' && ((*octet)++) >= 0)
+		if (tmp[i][0] == 'r' && ((utils->octet)++) >= 0)
 			print += (1 << shift);
-		else if (tmp[i][0] == '%' && ((*octet) += (opc == 1 || opc == 2 ||
+		else if (tmp[i][0] == '%' && ((utils->octet) += (opc == 1 || opc == 2 ||
 				opc == 6 || opc == 7 || opc == 8 || opc == 13) ? 4 : 2) >= 0)
 			print += (2 << shift);
-		else if (((*octet) += 2) >= 0)
+		else if (((utils->octet) += 2) >= 0)
 			print += (3 << shift);
 		shift -= 2;
 	}
 	ft_tabfree(tmp);
-	if ((i > 1 || opc == 16) && ((*octet)++))
-		store_output(print, 1, 0);
-	opc_params(line, ocs, opc);
+	if ((i > 1 || opc == 16) && ((utils->octet)++))
+		ft_outputadd(&(utils->output), ft_outputnew(print));
+	opc_params(line, ocs, opc, utils);
 }
 
-static void	handle_commands(char *line, int *octet)
+static void	handle_commands(char *line, t_utils *utils)
 {
 	char	**tmp;
 	int		opc;
 	char	*tmps;
 
-	tmp = ft_strsplit(line, "\t ");
+	if (!(tmp = ft_strsplit(line, "\t ")))
+		malloc_error();
 	if (tmp == NULL)
 		return ;
-	opc = commandlist(tmp[0], 1);
+	opc = identify_cmd(tmp[0], utils->cmds);
 	tmps = ft_delspaces(line);
-	store_output(opc, 1, 0);
-	handle_params(tmps + ft_strlen(tmp[0]), octet, opc);
+	ft_outputadd(&(utils->output), ft_outputnew(opc));
+	handle_params(tmps + ft_strlen(tmp[0]), utils, opc);
 	ft_tabfree(tmp);
 	free(tmps);
 }
 
-static void	parse_line(char *line)
+static void	parse_line(char *line, t_utils *utils)
 {
-	static int	octet = 0;
 	int			i;
 
 	i = 0;
@@ -71,39 +72,59 @@ static void	parse_line(char *line)
 	{
 		if (ft_isstrblank(line + i + 1) == 0)
 		{
-			handle_commands(line + i + 1, &octet);
-			octet++;
+			handle_commands(line + i + 1, utils);
+			(utils->octet)++;
 		}
 	}
 	else
 	{
-		handle_commands(line, &octet);
-		octet++;
+		handle_commands(line, utils);
+		(utils->octet)++;
 	}
+}
+
+static int	asm_pilot(char *file)
+{
+	t_utils utils;
+
+	utils = init_utils(file);
+	if (utils.fatal == 1)
+		return (0);
+	while (get_next_line(utils.fd, &(utils.line)) == 1)
+	{
+		delete_comments(&(utils.line));
+		if ((++(utils.i) >= 0) && !validity_line(&utils))
+			return (main_error(&utils));
+		if (!ft_isstrblank(utils.line) && !ft_strnstr(utils.line, ".name", 5)
+	&& !ft_strnstr(utils.line, ".comment", 8))
+			parse_line(utils.line, &utils);
+		else if (ft_strnstr(utils.line, ".name", 5))
+			add_infos((utils.line + 5), 0, 11, &utils);
+		else if (ft_strnstr(utils.line, ".comment", 8))
+			add_infos((utils.line + 8), 0, 12, &utils);
+		add_infos(NULL, 0, 2, &utils);
+		free(utils.line);
+	}
+	free(utils.line);
+	return (end_utils(file, &utils));
 }
 
 int			main(int ac, char **av)
 {
-	int			fd;
-	char		*line;
-	static int	i = -1;
-
-	fd = init_utils(ac, av);
-	while (get_next_line(get_fd(2, 0), &line) == 1)
+	int i;
+	i = 1;
+	if (ac == 1)
 	{
-		delete_comments(&line);
-		if ((++i >= 0) && !validity_line(line))
-			main_error(line, i);
-		if (ft_isstrblank(line) == 0 && !ft_strnstr(line, ".name", 5) &&
-				!ft_strnstr(line, ".comment", 8))
-			parse_line(line);
-		else if (ft_strnstr(line, ".name", 5))
-			add_infos("name", line + 5, 0, 1);
-		else if (ft_strnstr(line, ".comment", 8))
-			add_infos("comment", line + 8, 0, 1);
-		add_infos(NULL, NULL, 0, 2);
-		free(line);
+		ft_putendl("usage : ./asm [files.cor]");
 	}
-	free(line);
-	return (end_utils(ac, av));
+	
+	while (i < ac)
+	{
+		ft_putstr("--> Assembling : ["KBLU"\033[1m");
+		ft_putstr(av[i]);
+		ft_putstr(KNRM"]\n\t");
+		asm_pilot(av[i]);
+		i++;
+	}
+	return (0);
 }

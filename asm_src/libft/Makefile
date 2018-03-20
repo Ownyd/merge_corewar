@@ -6,7 +6,7 @@
 #    By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/04 21:27:41 by lowczarc          #+#    #+#              #
-#    Updated: 2018/03/15 15:58:51 by tlux             ###   ########.fr        #
+#    Updated: 2018/03/17 01:49:35 by tlux             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ OBJ= ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o \
 	 ft_atoll.o ft_strfreejoin.o ft_strfreesub.o \
 	 ft_isstrdigit.o ft_atoll.o \
 	 ft_tabfree.o ft_isstrblank.o \
-	 ft_delspaces.o ft_putstrlen.o ft_pow.o \
+	 ft_delspaces.o ft_putstrlen.o ft_pow.o ft_strocur.o\
 
 HEADERS=libft.h get_next_line.h 
 

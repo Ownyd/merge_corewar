@@ -6,13 +6,13 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 19:31:06 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/09 02:20:53 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/18 19:19:30 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/asm.h"
 
-static int	test_duplicate(t_label *lbs)
+int			test_duplicate_label(t_label *lbs)
 {
 	t_label	*act;
 	t_label	*tmp;
@@ -41,24 +41,16 @@ static int	test_duplicate(t_label *lbs)
 	return (1);
 }
 
-int			store_label(char *label, int octet, int cmd)
+int			return_label_pc(t_label *lbs, char *label)
 {
-	static t_label	*lbs = NULL;
-	t_label			*tmp;
+	t_label	*tmp;
 
 	tmp = lbs;
-	if (cmd == 1)
-		ft_labeladd(&lbs, ft_labelnew(label, octet));
-	if (cmd == 2)
-		while (tmp)
-		{
-			if (ft_strcmp(tmp->label, label) == 0)
-				return (tmp->octet);
-			tmp = tmp->next;
-		}
-	if (cmd == 3)
-		ft_labeldel(&lbs);
-	if (cmd == 4)
-		return (test_duplicate(lbs));
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->label, label) == 0)
+			return (tmp->octet);
+		tmp = tmp->next;
+	}
 	return (-1);
 }

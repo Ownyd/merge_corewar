@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   store_output.c                                     :+:      :+:    :+:   */
+/*   ft_strocur.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/28 21:48:23 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/02 17:30:32 by tlux             ###   ########.fr       */
+/*   Created: 2018/03/17 01:47:50 by tlux              #+#    #+#             */
+/*   Updated: 2018/03/17 01:49:04 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/asm.h"
-
-void	store_output(int c, int cmd, int fd)
+int	ft_strocur(char *str, char c)
 {
-	static t_otp	*output = NULL;
-	t_otp			*tmp;
+	int i;
+	int ret;
 
-	tmp = output;
-	if (cmd == 1)
-		ft_outputadd(&output, ft_outputnew(c));
-	else if (cmd == 2)
-		while (tmp)
-		{
-			ft_putchar_fd(tmp->c, fd);
-			tmp = tmp->next;
-		}
-	else if (cmd == 3)
-		ft_outputdel(&output);
+	ret = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			ret++;
+		i++;
+	}
+	return (ret);
 }
