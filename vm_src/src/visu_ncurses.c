@@ -6,7 +6,7 @@
 /*   By: lowczarc <lowczarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 19:19:46 by lowczarc          #+#    #+#             */
-/*   Updated: 2018/03/09 03:30:04 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/20 11:21:40 by lowczarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ void	init_visu_ncurses(t_vm *vm)
 	if (!(vm->visual = ft_memalloc(sizeof(t_visu))))
 		exit(ft_er("malloc error\n"));
 	initscr();
+	if (LINES < MEM_SIZE / 64 + 2 || COLS < 64 * 3 + 1)
+	{
+		free(vm->visual);
+		endwin();
+		ft_dprintf(2, "%s%dx%d (min : %dx%d)\n",
+				"Your term is too small to use visualizer : ", LINES,
+				COLS, MEM_SIZE / 64 + 2, 64 * 3 + 1);
+		exit(EXIT_FAILURE);
+	}
 	noecho();
 	curs_set(0);
 	vm->visual->pause = 1;
