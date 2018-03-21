@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/25 21:20:52 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/20 11:56:19 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/21 18:50:30 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int				validity_line(t_utils *utils)
 	else if (ft_strnstr(utils->line, ".comment", 8) &&
 			!validity_com((utils->line + 8), utils))
 		return (0);
-	else if (!ft_strnstr(utils->line, ".comment", 8) &&
+	else if (!ft_strnstr(utils->line, ".comment", 8) && (utils->line)[0] != '.' &&
 			!ft_strnstr(utils->line, ".name", 5) && !ft_isstrblank(utils->line))
 	{
 		if (utils->name != 1)
@@ -134,6 +134,13 @@ int				validity_line(t_utils *utils)
 			return (line_error(2));
 		else if (!validity_command_line(utils->line, *utils))
 			return (0);
+	}
+	else if (!ft_strnstr(utils->line, ".comment", 8) && (utils->line)[0] == '.' &&
+			!ft_strnstr(utils->line, ".name", 5) && !ft_isstrblank(utils->line))
+	{
+		ft_putstr("Ignored command : \"");
+		ft_putstr(utils->line);
+		ft_putstr("\"\n\t");
 	}
 	return (1);
 }

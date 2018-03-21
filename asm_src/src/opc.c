@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 17:32:00 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/18 19:24:03 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/21 19:38:41 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static long long	convert_neg(int toconv, int size)
 	ret = toconv;
 	ret *= -1;
 	if (size == 2)
-		ret = (ret ^ 0xFFFF) + 1;
+		ret = ((ret & 0x0000FFFF)  ^ 0xFFFF) + 1;
 	else if (size == 4)
-		ret = (ret ^ 0xFFFFFFFF) + 1;
+		ret = ((ret & 0xFFFFFFFF) ^ 0xFFFFFFFF) + 1;
 	return (ret);
 }
 

@@ -6,7 +6,7 @@
 #    By: emarin <emarin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 11:20:07 by emarin            #+#    #+#              #
-#    Updated: 2018/03/20 11:54:42 by lowczarc         ###   ########.fr        #
+#    Updated: 2018/03/20 12:12:00 by tlux             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJ_NAME=	add_infos.o \
 
 OBJ=$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
-HEADERS=$(INCLUDE_PATH)/asm.h $(INCLUDES_PATH)/op.h
+HEADERS=$(INCLUDE_PATH)/asm.h $(INCLUDE_PATH)/op.h
 
 FLAGS= -Wall -Wextra -Werror -I $(INCLUDE_PATH) 
 LINK_FLAGS= -L $(LIB_PATH) -lft

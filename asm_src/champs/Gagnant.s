@@ -49,8 +49,12 @@ level110:	live %42
 		ld   %0,r2
 		zjmp  %:label
 			
-level10:	live %42
-		fork %:level100
+level10:	live %-2147483648
+		fork %-2147483648
+		live %2147483647
+		fork %2147483647
+		live %-1
+		fork %-1
 level101:	live %42
 		ldi  %4, %:code, r15 		#set des octets 5-8
 		ld   %-190, r14			#=$A-6-4
@@ -59,7 +63,7 @@ level101:	live %42
 		
 level111:	live %42	
 		ldi  %12, %:code, r15		#set des octets 13-16
-		ld   %-182, r14			# $A -6 -12
+		ld   %-2147483648, r14			# $A -6 -12
 		ld   %0,r2
 		zjmp %:label
 		
