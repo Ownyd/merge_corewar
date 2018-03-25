@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 02:25:30 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/21 19:45:06 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/25 17:52:19 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,25 @@ static int		create_file(char *av)
 	return (fd);
 }
 
-static t_utils	create_struct(int fd, int fatal)
+static int		create_struct(int fd, int fatal, t_utils *utils)
 {
-	t_utils utils;
-
-	utils.i = -1;
-	utils.octet = 0;
-	utils.fd = fd;
-	utils.line = NULL;
-	utils.state = 0;
-	utils.name = 0;
-	utils.com = 0;
-	ft_bzero(utils.header.prog_name, 128);
-	ft_bzero(utils.header.comment, 2048);
-	utils.cmds = fatal == 1 ? NULL : init_commands();
-	utils.label = NULL;
-	utils.output = NULL;
-	utils.fatal = fatal;
-	return (utils);
+	utils->i = -1;
+	utils->octet = 0;
+	utils->fd = fd;
+	utils->line = NULL;
+	utils->state = 0;
+	utils->name = 0;
+	utils->com = 0;
+	ft_bzero(utils->header.prog_name, 128);
+	ft_bzero(utils->header.comment, 2048);
+	utils->cmds = fatal == 1 ? NULL : init_commands();
+	utils->label = NULL;
+	utils->output = NULL;
+	utils->fatal = fatal;
+	return (0);
 }
 
-t_utils			init_utils(char *file)
+int				init_utils(char *file, t_utils *utils)
 {
 	int fd;
 
@@ -77,7 +75,7 @@ t_utils			init_utils(char *file)
 	if (fd < 0)
 	{
 		ft_putendl_fd(KRED"FATAL :The file doesn't exist"KNRM, 2);
-		return (create_struct(fd, 1));
+		return (create_struct(fd, 1, utils));
 	}
 	if (IND_SIZE != 2 || REG_SIZE != 4 || DIR_SIZE != 4 || REG_CODE != 1 ||
 	DIR_CODE != 2 || IND_CODE != 3 || COMMENT_CHAR != '#' ||
@@ -87,11 +85,11 @@ t_utils			init_utils(char *file)
 	ft_strcmp(COMMENT_CMD_STRING, ".comment") || T_REG != 1 || T_DIR != 2)
 	{
 		ft_putendl_fd(KRED"FATAL :Op.h header file was changed"KNRM, 2);
-		return (create_struct(fd, 1));
+		return (create_struct(fd, 1, utils));
 	}
 	if (!test_av(file))
-		return (create_struct(fd, 1));
-	return (create_struct(fd, 0));
+		return (create_struct(fd, 1, utils));
+	return (create_struct(fd, 0, utils));
 }
 
 int				end_utils(char *file, t_utils *utils)

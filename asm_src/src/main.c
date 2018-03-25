@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/22 23:53:08 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/20 09:11:11 by tlux             ###   ########.fr       */
+/*   Updated: 2018/03/25 17:47:10 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	asm_pilot(char *file)
 {
 	t_utils utils;
 
-	utils = init_utils(file);
+	init_utils(file, &utils);
 	if (utils.fatal == 1)
 		return (0);
 	while (get_next_line(utils.fd, &(utils.line)) == 1)
@@ -112,12 +112,12 @@ static int	asm_pilot(char *file)
 int			main(int ac, char **av)
 {
 	int i;
+
 	i = 1;
 	if (ac == 1)
 	{
 		ft_putendl("usage : ./asm [files.cor] ...");
 	}
-	
 	while (i < ac)
 	{
 		ft_putstr("--> Assembling : ["KBLU"\033[1m");

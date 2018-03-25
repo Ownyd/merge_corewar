@@ -6,7 +6,7 @@
 /*   By: tlux <tlux@42.fr>                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 00:00:33 by tlux              #+#    #+#             */
-/*   Updated: 2018/03/20 11:48:06 by lowczarc         ###   ########.fr       */
+/*   Updated: 2018/03/25 17:49:37 by tlux             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,18 @@ typedef struct		s_cmds
 }					t_cmds;
 typedef struct		s_utils
 {
-	int i;
-	int fd;
-	int octet;
-	t_header header;
-	char	*line;
-	int state;
-	int name;
-	int com;
-	int fatal;
-	t_cmds *cmds;
-	t_label *label;
-	t_otp *output;
+	int				i;
+	int				fd;
+	int				octet;
+	t_header		header;
+	char			*line;
+	int				state;
+	int				name;
+	int				com;
+	int				fatal;
+	t_cmds			*cmds;
+	t_label			*label;
+	t_otp			*output;
 }					t_utils;
 void				malloc_error(void);
 void				print_output(t_utils *utils, int fd);
@@ -86,11 +86,12 @@ void				ft_labeladd(t_label **alst, t_label *new);
 void				ft_labeldel(t_label **todel);
 void				ft_putstrlen(char const *s, int len);
 char				*ft_delspaces(char *str);
-void				opc_params(char *params, int octet, int opc, t_utils *utils);
+void				opc_params(char *params, int octet, int opc,
+		t_utils *utils);
 int					store_label(char *label, int octet, int cmd);
 t_label				*ft_labelnew(char *str, int octet);
 int					end_utils(char *file, t_utils *utils);
-t_utils				init_utils(char *file);
+int					init_utils(char *file, t_utils *utils);
 int					main_error(t_utils *utils);
 int					line_error(int err);
 int					label_error(int err);
